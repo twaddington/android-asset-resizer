@@ -1,7 +1,7 @@
 android-asset-resizer
 =====================
 
-...::
+... ::
 
     This is a code sample
 
