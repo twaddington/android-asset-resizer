@@ -16,33 +16,44 @@ iOS@2x = xhdpi
 
 DENSITY_TYPES = ('ldpi', 'mdpi', 'hdpi', 'xhdpi', 'xxhdpi')
 
-def mkres(path):
-    """
-    Creates a directory tree for the resized Android assets.
-    """
-    for d in DENSITY_TYPES:
-        try:
-            os.makedirs('%s/res/drawable-%s' % (os.path.abspath(path), d), 0755)
-        except OSError:
-            pass
-
-def resize(path, out, density='xhdpi', prefix='', filter=Image.ANTIALIAS):
+class AssetResizer():
     """
     """
-    im = Image.open(path) 
+    def __init__(self, out, source_density='xhdpi', prefix='',
+            filter=Image.ANTIALIAS):
+        self.out = os.path.abspath(out)
+        self.source_density = source_density
+        self.prefix = prefix
+        self.filter = filter
 
-    w, h = im.size
+    def mkres(self):
+        """
+        Creates a directory tree for the resized Android assets.
+        """
+        for d in DENSITY_TYPES:
+            try:
+                path = os.path.join(self.out, 'res/drawable-%s' % d)
+                os.makedirs(path, 0755)
+            except OSError:
+                pass
 
-    # TODO: Function for calculating out width and height
-    size = (int(w * .75), int(h * .75))
-    print im.size
-    print size
+    def resize(self, path):
+        """
+        """
+        im = Image.open(path) 
 
-    _, filename = os.path.split(path)
+        w, h = im.size
 
-    # Try other options, provide setting? Try BILINEAR?
-    # TODO: Make this a method!
-    # TODO: drawable-xhdpi dir!
-    # TODO: Replace '@2x'
-    # TODO: Add prefix!
-    #im.resize(size, Image.ANTIALIAS).save(os.path.join(out, filename))
+        # TODO: Function for calculating out width and height
+        size = (int(w * .75), int(h * .75))
+        print im.size
+        print size
+
+        _, filename = os.path.split(path)
+
+        # Try other options, provide setting? Try BILINEAR?
+        # TODO: Make this a method!
+        # TODO: drawable-xhdpi dir!
+        # TODO: Replace '@2x'
+        # TODO: Add prefix!
+        #im.resize(size, Image.ANTIALIAS).save(os.path.join(out, filename))

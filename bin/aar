@@ -6,7 +6,7 @@ import os
 import sys
 import argparse
 
-from android_asset_resizer import resizer
+from android_asset_resizer.resizer import AssetResizer
 
 SOURCE_DENSITY_CHOICES = ('xxhdpi', 'xhdpi',)
 PIL_FILTER_CHOICES = ('NEAREST', 'BILINEAR', 'BICUBIC', 'ANTIALIAS')
@@ -57,16 +57,18 @@ def main():
     except OSError as e:
         pass
 
+    # Get our resizer
+    resizer = AssetResizer(out_dir, source_density=args.density,
+            prefix=args.prefix, filter=args.filter)
+
     # Make our resource directories
-    resizer.mkres(out_dir)
+    resizer.mkres()
 
     # Resize the assets
     for path in args.pattern:
-        uprint('Resizing: %s' % path)
-
         try:
-            resizer.resize(path, out_dir, density=args.density,
-                    prefix=args.prefix, filter=args.filter)
+            uprint('Resizing: %s' % path)
+            resizer.resize(path)
         except IOError:
             uprint('IOError: %s' % path)
 
