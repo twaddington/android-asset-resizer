@@ -6,41 +6,61 @@ import os
 import sys
 import argparse
 
+from android_asset_resizer import resizer
+
 SOURCE_DENSITY_CHOICES = ('xxhdpi', 'xhdpi',)
-DEFAULT_OUT_PATH = '%s/res' % os.getcwd()
+PIL_FILTER_CHOICES = ('NEAREST', 'BILINEAR', 'BICUBIC', 'ANTIALIAS')
+
+DEFAULT_DENSITY = 'xhdpi'
+DEFAULT_FILTER = 'ANTIALIAS'
+DEFAULT_OUT_PATH = os.getcwd()
 DEFAULT_OUT_MODE = 0755
 
 def main():
-    # ...
-    parser = argparse.ArgumentParser(description='Process some images.')
+    # Create our parser
+    parser = argparse.ArgumentParser(description='Resize image assets for an Android project')
 
-    # ...
-    # TODO: Add ldpi option
-    # TODO: Add filter argument for PIL
-    parser.add_argument('-d', '--density', default='xhdpi', choices=SOURCE_DENSITY_CHOICES,
+    # Set up our command-line arguments
+    parser.add_argument('-d', '--density', default=DEFAULT_DENSITY, choices=SOURCE_DENSITY_CHOICES,
             help='the density of the source images')
     parser.add_argument('-p', '--prefix',
             help='a prefix to add to the filename')
+    parser.add_argument('-f', '--filter', default=DEFAULT_FILTER, choices=PIL_FILTER_CHOICES,
+            help='the image filter to use')
     parser.add_argument('-o', '--out',
             help='the path to the output directory')
     parser.add_argument('pattern', nargs='+',
-            help='the path to the source images')
+            help='the path to the source images with matching pattern')
 
-    # ...
+    # Get our arguments
     args = parser.parse_args()
-    print args.density
-    print args.prefix
-    print args.out
 
-    # TODO: Validate args.out
-    # - Is a directory?
-    # - Is empty? if not os.listdir(work_path):
-    # - Is writeable?
+    # Get our output directory
+    if args.out:
+        out_dir = os.path.abspath(args.out)
+
+        if os.path.isfile(out_dir):
+            parser.error('The specified out is not a directory!')
+    else:
+        out_dir = DEFAULT_OUT_PATH
+
+    # Create the output directory if necessary
+    try:
+        os.makedirs(out_dir, DEFAULT_OUT_MODE)
+    except OSError as e:
+        pass
+
+    # Make our resource directories
+    resizer.mkres(out_dir)
+
+    # Resize the assets
+    for path in args.pattern:
+        resizer.resize(path, out_dir, density=args.density, prefix=args.prefix,
+                filter=args.filter)
+
 
 if __name__ == "__main__":
     try:
         sys.exit(main())
     except KeyboardInterrupt:
-        ## TODO: Implement this in our work loop!
         sys.exit()
-
