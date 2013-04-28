@@ -1,0 +1,46 @@
+#!/usr/bin/python
+"""
+"""
+
+import os
+import sys
+import argparse
+
+SOURCE_DENSITY_CHOICES = ('xxhdpi', 'xhdpi',)
+DEFAULT_OUT_PATH = '%s/res' % os.getcwd()
+DEFAULT_OUT_MODE = 0755
+
+def main():
+    # ...
+    parser = argparse.ArgumentParser(description='Process some images.')
+
+    # ...
+    # TODO: Add ldpi option
+    # TODO: Add filter argument for PIL
+    parser.add_argument('-d', '--density', default='xhdpi', choices=SOURCE_DENSITY_CHOICES,
+            help='the density of the source images')
+    parser.add_argument('-p', '--prefix',
+            help='a prefix to add to the filename')
+    parser.add_argument('-o', '--out',
+            help='the path to the output directory')
+    parser.add_argument('pattern', nargs='+',
+            help='the path to the source images')
+
+    # ...
+    args = parser.parse_args()
+    print args.density
+    print args.prefix
+    print args.out
+
+    # TODO: Validate args.out
+    # - Is a directory?
+    # - Is empty? if not os.listdir(work_path):
+    # - Is writeable?
+
+if __name__ == "__main__":
+    try:
+        sys.exit(main())
+    except KeyboardInterrupt:
+        ## TODO: Implement this in our work loop!
+        sys.exit()
+
