@@ -16,11 +16,11 @@ DEFAULT_FILTER = 'ANTIALIAS'
 DEFAULT_OUT_PATH = os.getcwd()
 DEFAULT_OUT_MODE = 0755
 
-def uprint(msg):
+def uprint(msg, newline=True):
     """
     Unbuffered print.
     """
-    sys.stdout.write("%s\n" % msg)
+    sys.stdout.write("%s%s" % (msg, "\n" if newline else ''))
     sys.stdout.flush()
 
 def main():
@@ -65,12 +65,19 @@ def main():
     resizer.mkres()
 
     # Resize the assets
+    count = 0
     for path in args.pattern:
         try:
-            uprint('Resizing: %s' % path)
+            #uprint('Resizing: %s' % path)
+            uprint('.', newline=False)
             resizer.resize(path)
+
+            # ...
+            count += 1
         except IOError:
             uprint('IOError: %s' % path)
+
+    uprint("\nResized %s assets" % count)
 
 
 if __name__ == "__main__":
