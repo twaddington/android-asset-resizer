@@ -1,6 +1,4 @@
 #!/usr/bin/python
-"""
-"""
 
 import os
 import sys
@@ -16,12 +14,13 @@ DEFAULT_FILTER = 'ANTIALIAS'
 DEFAULT_OUT_PATH = os.getcwd()
 DEFAULT_OUT_MODE = 0755
 
-def uprint(msg, newline=True):
+def uprint(msg, newline=True, quiet=False):
     """
     Unbuffered print.
     """
-    sys.stdout.write("%s%s" % (msg, "\n" if newline else ''))
-    sys.stdout.flush()
+    if not quiet:
+        sys.stdout.write("%s%s" % (msg, "\n" if newline else ''))
+        sys.stdout.flush()
 
 def main():
     # Create our parser
@@ -36,6 +35,8 @@ def main():
             help='the image filter to use')
     parser.add_argument('-o', '--out',
             help='the path to the output directory')
+    parser.add_argument('-q', '--quiet', action='store_true',
+            help='suppress all output except for errors')
     parser.add_argument('pattern', nargs='+',
             help='the path to the source images with matching pattern')
 
@@ -67,18 +68,18 @@ def main():
     # Resize the assets
     count = 0
     for path in args.pattern:
+        _, filename = os.path.split(path)
+
+        uprint('Resizing: %s' % filename, quiet=args.quiet)
         try:
-            #uprint('Resizing: %s' % path)
-            uprint('.', newline=False)
             resizer.resize(path)
-
-            # ...
+            uprint('  DONE', quiet=args.quiet)
             count += 1
-        except IOError:
-            uprint('IOError: %s' % path)
+        except IOError as e:
+            uprint('  FAILED', quiet=args.quiet)
+            uprint('  %s' % e.strerror)
 
-    uprint("\nResized %s assets" % count)
-
+    uprint("\nResized %s asset%s" % (count, 's' if count > 1 else ''), quiet=args.quiet)
 
 if __name__ == "__main__":
     try:
