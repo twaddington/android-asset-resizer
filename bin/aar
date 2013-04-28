@@ -16,6 +16,13 @@ DEFAULT_FILTER = 'ANTIALIAS'
 DEFAULT_OUT_PATH = os.getcwd()
 DEFAULT_OUT_MODE = 0755
 
+def uprint(msg):
+    """
+    Unbuffered print.
+    """
+    sys.stdout.write("%s\n" % msg)
+    sys.stdout.flush()
+
 def main():
     # Create our parser
     parser = argparse.ArgumentParser(description='Resize image assets for an Android project')
@@ -55,8 +62,13 @@ def main():
 
     # Resize the assets
     for path in args.pattern:
-        resizer.resize(path, out_dir, density=args.density, prefix=args.prefix,
-                filter=args.filter)
+        uprint('Resizing: %s' % path)
+
+        try:
+            resizer.resize(path, out_dir, density=args.density,
+                    prefix=args.prefix, filter=args.filter)
+        except IOError:
+            uprint('IOError: %s' % path)
 
 
 if __name__ == "__main__":
