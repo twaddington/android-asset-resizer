@@ -86,6 +86,7 @@ class AssetResizer():
 
     def get_out_for_density(self, target_density):
         """
+        Return the out directory for the given target density.
         """
         return os.path.join(self.out, 'res/drawable-%s' % target_density)
 
