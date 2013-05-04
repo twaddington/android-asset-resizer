@@ -1,7 +1,11 @@
 android-asset-resizer
 =====================
 
-The Android asset resizer can be used to generate images from 
+The Android asset resizer can be used to generate drawable assets from a larger
+source image, like an iOS ``@2x`` asset or an ``xhdpi`` drawable.
+
+The script will generate the expected ``ldpi``, ``mdpi``, ``hdpi`` and
+``xhdpi`` assets from the source image.
 
 Requirements
 ------------
