@@ -23,7 +23,7 @@ setup(
     url='https://github.com/twaddington/android-asset-resizer',
     install_requires=requires,
     packages=['android_asset_resizer',],
-    scripts=['bin/adresize',],
+    scripts=['bin/aaresize',],
     zip_safe=False,
     classifiers=[
         'Development Status :: 4 - Beta', # 4 Beta, 5 Production/Stable
