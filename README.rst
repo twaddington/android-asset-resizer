@@ -1,6 +1,8 @@
 android-asset-resizer
 =====================
 
+The Android asset resizer can be used to generate images from 
+
 Requirements
 ------------
 
@@ -20,9 +22,9 @@ You can easily generate Android assets from your ``@2x`` iOS assets:
 
 ::
 
-    $ adresize assets/icon@2x.png
+    $ aaresize assets/icon@2x.png
 
-Running the previous command will create the following assets:
+Running this command will generate the following assets:
 
 ::
 
@@ -43,21 +45,45 @@ You can also resize an entire directory of images:
 
 ::
 
-    $ adresize assets/*@2x.png
+    $ aaresize assets/*@2x.png
 
 An Android ``xhdpi`` asset is roughly equivalent to an ``@2x`` asset, so you
 can easily resize those too:
 
 ::
 
-    $ adresize res/drawable-xhdpi/*.png
+    $ aaresize res/drawable-xhdpi/*.png
 
 If you have a large ``drawable-xxhdpi`` asset you can use the ``--density``
 flag to generate the smaller assets:
 
 ::
 
-    $ adresize res/drawable-xxhdpi/*.png --density=xxhdpi
+    $ aaresize res/drawable-xxhdpi/*.png --density=xxhdpi
+
+You can also easily add a prefix to your new assets:
+
+::
+
+    $ aaresize assets/*@2x.png --prefix=ic_
+
+You can also import the ``AssetResizer`` class and incorporate it into your
+own scripts:
+
+::
+
+    from PIL import Image
+    from android_asset_resizer.resizer import AssetResizer
+
+    # Create our resizer
+    resizer = AssetResizer(out_dir, source_density='xhdpi',
+        prefix='ic_', filter=Image.ANTIALIAS)
+
+    # Make our resource directories
+    resizer.mkres()
+
+    # Resize an image
+    resizer.resize(path)
 
 Publishing
 ----------
