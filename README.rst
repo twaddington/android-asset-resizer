@@ -81,7 +81,7 @@ own scripts:
 
     # Create our resizer
     resizer = AssetResizer(out_dir, source_density='xhdpi',
-        prefix='ic_', filter=Image.ANTIALIAS)
+        prefix='ic_', image_filter=Image.ANTIALIAS)
 
     # Make our resource directories
     resizer.mkres()

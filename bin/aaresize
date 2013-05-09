@@ -4,10 +4,17 @@ import os
 import sys
 import argparse
 
+from PIL import Image
 from android_asset_resizer.resizer import AssetResizer
 
 SOURCE_DENSITY_CHOICES = ('xxhdpi', 'xhdpi',)
 PIL_FILTER_CHOICES = ('NEAREST', 'BILINEAR', 'BICUBIC', 'ANTIALIAS')
+PIL_FILTER_MAP = {
+    'NEAREST': Image.NEAREST,
+    'BILINEAR': Image.BILINEAR,
+    'BICUBIC': Image.BICUBIC,
+    'ANTIALIAS': Image.ANTIALIAS
+}
 
 DEFAULT_DENSITY = 'xhdpi'
 DEFAULT_FILTER = 'ANTIALIAS'
@@ -60,7 +67,7 @@ def main():
 
     # Get our resizer
     resizer = AssetResizer(out_dir, source_density=args.density,
-            prefix=args.prefix, filter=args.filter)
+            prefix=args.prefix, image_filter=PIL_FILTER_MAP.get(args.filter))
 
     # Make our resource directories
     resizer.mkres()
