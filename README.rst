@@ -107,7 +107,7 @@ Bug reports
 -----------
 
 If you encounter any issues, please open a new issue on the project's
-GitHub_page_.
+`GitHub page`_.
 
 License
 -------
@@ -115,4 +115,4 @@ License
 See the LICENSE_ file.
 
 .. _LICENSE: https://github.com/twaddington/android-asset-resizer/blob/master/LICENSE 
-.. _GitHub_page: https://github.com/twaddington/android-asset-resizer
+.. _GitHub page: https://github.com/twaddington/android-asset-resizer
