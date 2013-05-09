@@ -15,8 +15,8 @@ requires = [
 setup(
     name='android-asset-resizer',
     version=android_asset_resizer.__version__,
-    description="""A command-line utility for generating Android drawables in
-        the required densities.""",
+    description='A command-line utility for generating Android drawables in'
+                ' the required densities.',
     long_description=open('README.rst').read(),
     license=open('LICENSE').read(),
     author='Tristan Waddington',
