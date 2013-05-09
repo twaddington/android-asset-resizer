@@ -1,6 +1,7 @@
 import os
 from PIL import Image
 
+
 DENSITY_TYPES = ('ldpi', 'mdpi', 'hdpi', 'xhdpi', 'xxhdpi')
 DENSITY_MAP = {
     'ldpi': float(3),
@@ -9,6 +10,7 @@ DENSITY_MAP = {
     'xhdpi': float(8),
     'xxhdpi': float(12),
 }
+
 
 class AssetResizer():
     def __init__(self, out, source_density='xhdpi', prefix='',
@@ -58,7 +60,7 @@ class AssetResizer():
         """
         Generate assets from the given image
         """
-        im = Image.open(path) 
+        im = Image.open(path)
 
         # Get the original filename
         _, filename = os.path.split(path)
