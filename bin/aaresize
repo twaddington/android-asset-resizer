@@ -86,7 +86,7 @@ def main():
             uprint('  FAILED', quiet=args.quiet)
             uprint('  %s' % e.strerror)
 
-    uprint("Resized %s asset%s" % (count, 's' if count > 1 else ''), quiet=args.quiet)
+    uprint("Resized %s asset%s" % (count, '' if count == 1 else 's'), quiet=args.quiet)
 
 if __name__ == "__main__":
     try:
