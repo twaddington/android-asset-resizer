@@ -65,17 +65,17 @@ flag to generate the smaller assets:
 
     $ aaresize res/drawable-xxhdpi/*.png --density=xxhdpi
 
-Use the ``--ldpi`` flag to generate ldpi density assets:
-
-::
-
-    $ aaresize res/drawable-xhdpi/*.png --ldpi
-
 You can also easily add a prefix to your new assets:
 
 ::
 
     $ aaresize assets/*@2x.png --prefix=ic_
+
+Use the ``--ldpi`` flag to generate low density assets:
+
+::
+
+    $ aaresize res/drawable-xhdpi/*.png --ldpi
 
 You can also import the ``AssetResizer`` class and incorporate it into your
 own scripts:
