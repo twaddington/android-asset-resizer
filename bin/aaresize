@@ -5,6 +5,7 @@ import sys
 import argparse
 
 from PIL import Image
+from android_asset_resizer import __version__
 from android_asset_resizer.resizer import AssetResizer
 
 SOURCE_DENSITY_CHOICES = ('xxhdpi', 'xhdpi',)
@@ -31,7 +32,8 @@ def uprint(msg, newline=True, quiet=False):
 
 def main():
     # Create our parser
-    parser = argparse.ArgumentParser(description='Resize image assets for an Android project')
+    parser = argparse.ArgumentParser(prog='Android Asset Resizer',
+            description='Resize image assets for an Android project')
 
     # Set up our command-line arguments
     parser.add_argument('-d', '--density', default=DEFAULT_DENSITY, choices=SOURCE_DENSITY_CHOICES,
@@ -46,6 +48,8 @@ def main():
             help='generate ldpi assets')
     parser.add_argument('-q', '--quiet', action='store_true',
             help='suppress all output except for errors')
+    parser.add_argument('-v', '--version', action='version',
+            version='%(prog)s {v}'.format(v=__version__))
     parser.add_argument('pattern', nargs='+',
             help='the path to the source images with matching pattern')
 
