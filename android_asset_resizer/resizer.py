@@ -13,7 +13,7 @@ DENSITY_MAP = {
 
 
 class AssetResizer():
-    def __init__(self, out, source_density='xhdpi', prefix='',
+    def __init__(self, out, source_density='xhdpi', prefix='', ldpi=False,
             image_filter=Image.ANTIALIAS):
         if source_density not in DENSITY_TYPES:
             raise ValueError('source_density must be one of %s' % str(DENSITY_TYPES))
@@ -21,6 +21,7 @@ class AssetResizer():
         self.out = os.path.abspath(out)
         self.source_density = source_density
         self.prefix = prefix
+        self.ldpi = ldpi
         self.image_filter = image_filter
 
     def mkres(self):
@@ -28,6 +29,9 @@ class AssetResizer():
         Create a directory tree for the resized assets
         """
         for d in DENSITY_TYPES:
+            if d == 'ldpi' and not self.ldpi:
+                continue # skip ldpi
+
             try:
                 path = os.path.join(self.out, 'res/drawable-%s' % d)
                 os.makedirs(path, 0755)
@@ -74,6 +78,9 @@ class AssetResizer():
 
         # Generate assets from the source image
         for d in DENSITY_TYPES:
+            if d == 'ldpi' and not self.ldpi:
+                continue # skip ldpi
+
             out_file = os.path.join(self.out,
                     self.get_out_for_density(d), filename)
 
