@@ -30,7 +30,7 @@ class AssetResizer():
         """
         for d in DENSITY_TYPES:
             if d == 'ldpi' and not self.ldpi:
-                continue # skip ldpi
+                continue  # skip ldpi
 
             try:
                 path = os.path.join(self.out, 'res/drawable-%s' % d)
@@ -79,7 +79,7 @@ class AssetResizer():
         # Generate assets from the source image
         for d in DENSITY_TYPES:
             if d == 'ldpi' and not self.ldpi:
-                continue # skip ldpi
+                continue  # skip ldpi
 
             out_file = os.path.join(self.out,
                     self.get_out_for_density(d), filename)
