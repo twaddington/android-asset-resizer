@@ -4,8 +4,8 @@ android-asset-resizer
 The Android asset resizer can be used to generate drawable assets from a larger
 source image, like an iOS ``@2x`` asset or an ``xhdpi`` drawable.
 
-The script will generate the expected ``ldpi``, ``mdpi``, ``hdpi`` and
-``xhdpi`` assets from the source image.
+The script will generate the expected ``mdpi``, ``hdpi``, ``xhdpi`` and
+``xxhdpi`` assets from the source image.
 
 Requirements
 ------------
@@ -33,13 +33,13 @@ Running this command will generate the following assets:
 ::
 
     - res
-      - drawable-ldpi
-        - icon.png
       - drawable-mdpi
         - icon.png
       - drawable-hdpi
         - icon.png
       - drawable-xhdpi
+        - icon.png
+      - drawable-xxhdpi
         - icon.png
 
 These assets were created from the original ``@2x`` asset where the icon in
@@ -64,6 +64,12 @@ flag to generate the smaller assets:
 ::
 
     $ aaresize res/drawable-xxhdpi/*.png --density=xxhdpi
+
+Use the ``--ldpi`` flag to generate ldpi density assets:
+
+::
+
+    $ aaresize res/drawable-xhdpi/*.png --ldpi
 
 You can also easily add a prefix to your new assets:
 
