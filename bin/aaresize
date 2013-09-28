@@ -89,7 +89,10 @@ def main():
             uprint('  DONE', quiet=args.quiet)
             count += 1
         except IOError as e:
-            uprint('  FAILED! %s' % e.strerror, quiet=args.quiet)
+            if e.message:
+                uprint('  FAILED! Error: %s' % e.message, quiet=args.quiet)
+            else:
+                uprint('  FAILED! Error %s: %s' % (e.errno, e.strerror), quiet=args.quiet)
 
     uprint("Resized %s asset%s" % (count, '' if count == 1 else 's'), quiet=args.quiet)
 
