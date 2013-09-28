@@ -103,9 +103,6 @@ Publishing
     # Register with pypi (only done once)
     $ python setup.py register
 
-    # Upload a new binary distribution to pypi
-    $ python setup.py bdist_egg upload
-
     # Upload a new source distribution to pypi
     $ python setup.py sdist upload
 
