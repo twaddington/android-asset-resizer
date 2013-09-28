@@ -4,6 +4,8 @@ import os
 import sys
 import argparse
 
+from glob import glob
+
 from PIL import Image
 from android_asset_resizer import __version__
 from android_asset_resizer.resizer import AssetResizer
@@ -80,19 +82,20 @@ def main():
 
     # Resize the assets
     count = 0
-    for path in args.pattern:
-        _, filename = os.path.split(path)
+    for p in args.pattern:
+        for path in glob(p):
+            _, filename = os.path.split(path)
 
-        uprint('Resizing: %s' % filename, quiet=args.quiet)
-        try:
-            resizer.resize(path)
-            uprint('  DONE', quiet=args.quiet)
-            count += 1
-        except IOError as e:
-            if e.message:
-                uprint('  FAILED! Error: %s' % e.message, quiet=args.quiet)
-            else:
-                uprint('  FAILED! Error %s: %s' % (e.errno, e.strerror), quiet=args.quiet)
+            uprint('Resizing: %s' % filename, quiet=args.quiet)
+            try:
+                resizer.resize(path)
+                uprint('  DONE', quiet=args.quiet)
+                count += 1
+            except IOError as e:
+                if e.message:
+                    uprint('  FAILED! Error: %s' % e.message, quiet=args.quiet)
+                else:
+                    uprint('  FAILED! Error %s: %s' % (e.errno, e.strerror), quiet=args.quiet)
 
     uprint("Resized %s asset%s" % (count, '' if count == 1 else 's'), quiet=args.quiet)
 
