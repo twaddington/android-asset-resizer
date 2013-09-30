@@ -56,7 +56,7 @@ def main():
     parser.add_argument('-v', '--version', action='version',
             version='%(prog)s {v}'.format(v=__version__))
     parser.add_argument('pattern', nargs='+',
-            help='the path to the source images with matching pattern')
+            help='the path to the source images (supports wildcards)')
 
     # Get our arguments
     args = parser.parse_args()
@@ -92,7 +92,7 @@ def main():
 
             if filename.endswith(NINE_PATCH_EXT):
                 uprint('Skipping: %s' % filename, quiet=args.quiet)
-                uprint('  Error: Nine-patch resizing not supported.')
+                uprint('  Error: Nine-patch resizing not supported.', quiet=args.quiet)
                 continue  # skip to the next file
 
             uprint('Resizing: %s' % filename, quiet=args.quiet)
@@ -102,9 +102,9 @@ def main():
                 count += 1
             except IOError as e:
                 if e.message:
-                    uprint('  FAILED! Error: %s' % e.message, quiet=args.quiet)
+                    uprint('  FAILED! Error: %s' % e.message)
                 else:
-                    uprint('  FAILED! Error %s: %s' % (e.errno, e.strerror), quiet=args.quiet)
+                    uprint('  FAILED! Error %s: %s' % (e.errno, e.strerror))
 
     uprint("Resized %s asset%s" % (count, '' if count == 1 else 's'), quiet=args.quiet)
 
