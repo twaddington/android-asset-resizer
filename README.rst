@@ -77,6 +77,13 @@ Use the ``--ldpi`` flag to generate low density assets:
 
     $ aaresize res/drawable-xhdpi/*.png --ldpi
 
+Use the ``--exclude`` flag to specify a list of files that should not be
+resized:
+
+::
+
+    $ aaresize res/drawable-xhdpi/*.png --exclude=ic_launcher.png,ic_status.png
+
 You can also import the ``AssetResizer`` class and incorporate it into your
 own scripts:
 
