@@ -23,6 +23,7 @@ DEFAULT_DENSITY = 'xhdpi'
 DEFAULT_FILTER = 'ANTIALIAS'
 DEFAULT_OUT_PATH = os.getcwd()
 DEFAULT_OUT_MODE = 0755
+NINE_PATCH_EXT = '.9.png'
 
 def uprint(msg, newline=True, quiet=False):
     """
@@ -88,6 +89,11 @@ def main():
     for p in args.pattern:
         for path in glob(p):
             _, filename = os.path.split(path)
+
+            if filename.endswith(NINE_PATCH_EXT):
+                uprint('Skipping: %s' % filename, quiet=args.quiet)
+                uprint('  Error: Nine-patch resizing not supported.')
+                continue  # skip to the next file
 
             uprint('Resizing: %s' % filename, quiet=args.quiet)
             try:
