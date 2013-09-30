@@ -2,19 +2,20 @@ import os
 from PIL import Image
 
 
-DENSITY_TYPES = ('ldpi', 'mdpi', 'hdpi', 'xhdpi', 'xxhdpi')
+DENSITY_TYPES = ('ldpi', 'mdpi', 'hdpi', 'xhdpi', 'xxhdpi', 'xxxhdpi')
 DENSITY_MAP = {
     'ldpi': float(3),
     'mdpi': float(4),
     'hdpi': float(6),
     'xhdpi': float(8),
     'xxhdpi': float(12),
+    'xxxhdpi': float(16),
 }
 
 
 class AssetResizer():
     def __init__(self, out, source_density='xhdpi', prefix='', ldpi=False,
-            image_filter=Image.ANTIALIAS):
+            xxxhdpi=False, image_filter=Image.ANTIALIAS):
         if source_density not in DENSITY_TYPES:
             raise ValueError('source_density must be one of %s' % str(DENSITY_TYPES))
 
@@ -22,6 +23,7 @@ class AssetResizer():
         self.source_density = source_density
         self.prefix = prefix
         self.ldpi = ldpi
+        self.xxxhdpi = xxxhdpi
         self.image_filter = image_filter
 
     def mkres(self):
@@ -31,6 +33,8 @@ class AssetResizer():
         for d in DENSITY_TYPES:
             if d == 'ldpi' and not self.ldpi:
                 continue  # skip ldpi
+            if d == 'xxxhdpi' and not self.xxxhdpi:
+                continue  # skip xxxhdpi
 
             try:
                 path = os.path.join(self.out, 'res/drawable-%s' % d)
@@ -80,6 +84,8 @@ class AssetResizer():
         for d in DENSITY_TYPES:
             if d == 'ldpi' and not self.ldpi:
                 continue  # skip ldpi
+            if d == 'xxxhdpi' and not self.xxxhdpi:
+                continue  # skip xxxhdpi
 
             out_file = os.path.join(self.out,
                     self.get_out_for_density(d), filename)
