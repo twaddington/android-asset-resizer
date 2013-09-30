@@ -3,10 +3,11 @@
 import os
 import sys
 import argparse
+import time
 
 from glob import glob
-
 from PIL import Image
+
 from android_asset_resizer import __version__
 from android_asset_resizer.resizer import AssetResizer
 
@@ -26,6 +27,23 @@ DEFAULT_OUT_PATH = os.getcwd()
 DEFAULT_OUT_MODE = 0755
 NINE_PATCH_EXT = '.9.png'
 
+# Legacy setting if multiprocessing is not available
+legacy = False
+
+# Quiet setting for this session
+quiet = False
+
+# Number of images processed in this session
+count = 0
+
+# Images to be excluded from processing for this session
+exclude = []
+
+try:
+    import multiprocessing
+except ImportError:
+    legacy = True
+
 def uprint(msg, newline=True, quiet=False):
     """
     Unbuffered print.
@@ -34,7 +52,49 @@ def uprint(msg, newline=True, quiet=False):
         sys.stdout.write("%s%s" % (msg, "\n" if newline else ''))
         sys.stdout.flush()
 
+def onComplete(filename):
+    """
+    Callback invoked when a thread is finished processing an image.
+    """
+    if not filename:
+        return  # skipped due to an error
+
+    # Increment the number of images that were processed
+    global count
+    count += 1
+
+    # Indicate the file was finished processing
+    uprint('Processed: %s' % filename, quiet=quiet)
+
+def doWork(resizer, path):
+    """
+    Process an image using the given asset resizer.
+    """
+    _, filename = os.path.split(path)
+
+    if filename in exclude:
+        return  # skip to the next file
+
+    if filename.endswith(NINE_PATCH_EXT):
+        uprint("Skipping: %s!\n"
+                "  Nine-patch resizing not supported." % filename, quiet=quiet)
+        return  # skip to the next file
+
+    try:
+        resizer.resize(path)
+
+        # The file was successfully resized
+        return filename
+    except IOError as e:
+        if e.message:
+            uprint("Failed: %s\n  Error: %s" % (filename, e.message))
+        else:
+            uprint("Failed: %s\n  Error %s: %s" % (filename, e.errno, e.strerror))
+
 def main():
+    # Start the clock
+    start = time.time()
+
     # Create our parser
     parser = argparse.ArgumentParser(prog='Android Asset Resizer',
             description='Resize image assets for an Android project')
@@ -56,6 +116,8 @@ def main():
             help='generate xxxhdpi assets')
     parser.add_argument('-e', '--exclude',
             help='comma-separated list of filenames to be excluded from resizing')
+    parser.add_argument('--legacy', action='store_true',
+            help='disable experimental multiprocessing support and process images serially')
     parser.add_argument('--quiet', action='store_true',
             help='suppress all output except for errors')
     parser.add_argument('--version', action='version',
@@ -66,12 +128,27 @@ def main():
     # Get our arguments
     args = parser.parse_args()
 
+    # Set the global legacy setting
+    global legacy
+    legacy = legacy or args.legacy
+
+    # Set the global quiet setting
+    global quiet
+    quiet = args.quiet
+
+    # Set our excluded filenames
+    if args.exclude:
+        global exclude
+        exclude = [f.strip() for f in args.exclude.split(',')]
+
     # Get our output directory
     if args.out:
         out_dir = os.path.abspath(args.out)
 
         if os.path.isfile(out_dir):
             parser.error('The specified out is not a directory!')
+        if not os.access(out_dir, os.W_OK):
+            parser.error('The specified out is not writable!')
     else:
         out_dir = DEFAULT_OUT_PATH
 
@@ -80,9 +157,6 @@ def main():
         os.makedirs(out_dir, DEFAULT_OUT_MODE)
     except OSError as e:
         pass
-
-    # Get our excluded filenames
-    exclude = [f.strip() for f in args.exclude.split(',')]
 
     # Create our resizer
     resizer = AssetResizer(out_dir)
@@ -98,34 +172,42 @@ def main():
     # Make our resource directories
     resizer.mkres()
 
+    # Set up our pool of workers
+    if not legacy:
+        pool = multiprocessing.Pool(processes=multiprocessing.cpu_count())
+    else:
+        pool = None
+        uprint("Warning: Processing images serially in legacy mode!", quiet=quiet)
+
     # Resize the assets
-    count = 0
     for p in args.pattern:
         for path in glob(p):
-            _, filename = os.path.split(path)
+            if not legacy:
+                pool.apply_async(doWork, [resizer, path], callback=onComplete)
+            else:
+                onComplete(doWork(resizer, path))
 
-            if filename in exclude:
-                continue  # skip to the next file
+    if not legacy:
+        # We are not adding any more work to the pool
+        pool.close()
 
-            if filename.endswith(NINE_PATCH_EXT):
-                uprint('Skipping: %s' % filename, quiet=args.quiet)
-                uprint('  Error: Nine-patch resizing not supported.', quiet=args.quiet)
-                continue  # skip to the next file
+        # Wait until all work has finished
+        pool.join()
 
-            uprint('Resizing: %s' % filename, quiet=args.quiet)
-            try:
-                resizer.resize(path)
-                uprint('  DONE', quiet=args.quiet)
-                count += 1
-            except IOError as e:
-                if e.message:
-                    uprint('  FAILED! Error: %s' % e.message)
-                else:
-                    uprint('  FAILED! Error %s: %s' % (e.errno, e.strerror))
+    # Prepare our summary
+    if not quiet:
+        global count
 
-    uprint("Resized %s asset%s" % (count, '' if count == 1 else 's'), quiet=args.quiet)
+        # Formatting
+        pluralize = ('' if count == 1 else 's')
 
-if __name__ == "__main__":
+        # Determine our elapsed time
+        elapsed = round((time.time() - start), 3)
+
+        uprint('Resized {count} asset{plural} in {elapsed}s'.format(count=count,
+                plural=pluralize, elapsed=elapsed), quiet=quiet)
+
+if __name__ == '__main__':
     try:
         sys.exit(main())
     except KeyboardInterrupt:
