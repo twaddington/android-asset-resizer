@@ -54,6 +54,8 @@ def main():
             help='generate ldpi assets')
     parser.add_argument('-x', '--xxxhdpi', action='store_true',
             help='generate xxxhdpi assets')
+    parser.add_argument('-e', '--exclude',
+            help='comma-separated list of filenames to be excluded from resizing')
     parser.add_argument('--quiet', action='store_true',
             help='suppress all output except for errors')
     parser.add_argument('--version', action='version',
@@ -79,6 +81,9 @@ def main():
     except OSError as e:
         pass
 
+    # Get our excluded filenames
+    exclude = [f.strip() for f in args.exclude.split(',')]
+
     # Create our resizer
     resizer = AssetResizer(out_dir)
 
@@ -98,6 +103,9 @@ def main():
     for p in args.pattern:
         for path in glob(p):
             _, filename = os.path.split(path)
+
+            if filename in exclude:
+                continue  # skip to the next file
 
             if filename.endswith(NINE_PATCH_EXT):
                 uprint('Skipping: %s' % filename, quiet=args.quiet)
