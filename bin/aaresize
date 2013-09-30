@@ -21,6 +21,7 @@ PIL_FILTER_MAP = {
 
 DEFAULT_DENSITY = 'xhdpi'
 DEFAULT_FILTER = 'ANTIALIAS'
+DEFAULT_QUALITY = 85
 DEFAULT_OUT_PATH = os.getcwd()
 DEFAULT_OUT_MODE = 0755
 NINE_PATCH_EXT = '.9.png'
@@ -45,15 +46,17 @@ def main():
             help='a prefix to add to the filename')
     parser.add_argument('-f', '--filter', default=DEFAULT_FILTER, choices=PIL_FILTER_CHOICES,
             help='the image filter to use')
+    parser.add_argument('-q', '--quality', type=int, default=DEFAULT_QUALITY,
+            help='the image quality to use when resizing jpeg images')
     parser.add_argument('-o', '--out',
             help='the path to the output directory')
     parser.add_argument('-l', '--ldpi', action='store_true',
             help='generate ldpi assets')
     parser.add_argument('-x', '--xxxhdpi', action='store_true',
             help='generate xxxhdpi assets')
-    parser.add_argument('-q', '--quiet', action='store_true',
+    parser.add_argument('--quiet', action='store_true',
             help='suppress all output except for errors')
-    parser.add_argument('-v', '--version', action='version',
+    parser.add_argument('--version', action='version',
             version='%(prog)s {v}'.format(v=__version__))
     parser.add_argument('pattern', nargs='+',
             help='the path to the source images (supports wildcards)')
@@ -76,10 +79,16 @@ def main():
     except OSError as e:
         pass
 
-    # Get our resizer
-    resizer = AssetResizer(out_dir, source_density=args.density,
-            ldpi=args.ldpi, xxxhdpi=args.xxxhdpi, prefix=args.prefix,
-            image_filter=PIL_FILTER_MAP.get(args.filter))
+    # Create our resizer
+    resizer = AssetResizer(out_dir)
+
+    # Configure our resizer
+    resizer.source_density = args.density
+    resizer.ldpi = args.ldpi
+    resizer.xxxhdpi = args.xxxhdpi
+    resizer.prefix = args.prefix
+    resizer.image_filter = PIL_FILTER_MAP.get(args.filter)
+    resizer.image_quality = args.quality
 
     # Make our resource directories
     resizer.mkres()
