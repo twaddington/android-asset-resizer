@@ -69,8 +69,13 @@ class AssetResizer():
         """
         Generate assets from the given image
         """
-        im = Image.open(path)
+        return self.resize_image(path, Image.open(path))
 
+    def resize_image(self, path, im):
+        """
+        Generate assets from the given image and path in case you've already
+        called Image.open
+        """
         # Get the original filename
         _, filename = os.path.split(path)
 
