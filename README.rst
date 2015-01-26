@@ -22,6 +22,13 @@ Installing
 
     $ pip install android-asset-resizer
 
+If you'd like to use the pillow imaging library instead of PIL you can install
+the script with this command:
+
+::
+
+    $ pip install --no-deps android-asset-resizer && pip install pillow
+
 Examples
 --------
 
