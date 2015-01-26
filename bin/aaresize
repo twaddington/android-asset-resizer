@@ -19,6 +19,7 @@ PIL_FILTER_MAP = {
     'BICUBIC': Image.BICUBIC,
     'ANTIALIAS': Image.ANTIALIAS
 }
+PIL_VERIFIED_IMAGE_MODES = ('RGB', 'RGBA')
 
 DEFAULT_DENSITY = 'xhdpi'
 DEFAULT_FILTER = 'ANTIALIAS'
@@ -81,7 +82,18 @@ def doWork(resizer, path):
         return  # skip to the next file
 
     try:
-        resizer.resize(path)
+        im = Image.open(path)
+
+        # Warn on unusual Image modes
+        if im.mode not in PIL_VERIFIED_IMAGE_MODES:
+            msg = ("\n  Error: This file uses the '{mode}' Image mode."
+                   "\n         Resizing this image will cause unpredictable results."
+                   "\n         This is probably not what you want."
+                   "\n         Try again after exporting your image using the RGB or RGBA mode.").format(mode=im.mode)
+            uprint("Warning: %s%s" % (filename, msg), quiet=quiet)
+
+        # Resize the image
+        resizer.resize_image(path, im)
 
         # The file was successfully resized
         return filename
