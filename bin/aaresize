@@ -64,9 +64,6 @@ def onComplete(filename):
     global count
     count += 1
 
-    # Indicate the file was finished processing
-    uprint('Processed: %s' % filename, quiet=quiet)
-
 def doWork(resizer, path):
     """
     Process an image using the given asset resizer.
@@ -94,6 +91,9 @@ def doWork(resizer, path):
 
         # Resize the image
         resizer.resize_image(path, im)
+
+        # Indicate the file was finished processing
+        uprint('Processed: %s' % filename, quiet=quiet)
 
         # The file was successfully resized
         return filename
