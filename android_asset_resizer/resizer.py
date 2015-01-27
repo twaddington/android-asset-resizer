@@ -1,4 +1,5 @@
 import os
+import re
 from PIL import Image
 
 
@@ -63,7 +64,7 @@ class AssetResizer():
         """
         Return a sanitized image filename
         """
-        return filename.replace('@2x', '').replace('-', '_')
+        return re.sub("@[0-9]+x", "", filename).replace('-', '_')
 
     def resize(self, path):
         """
