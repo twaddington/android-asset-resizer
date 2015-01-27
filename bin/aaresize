@@ -195,7 +195,10 @@ def main():
     for p in args.pattern:
         for path in glob(p):
             if not legacy:
-                pool.apply_async(doWork, [resizer, path], callback=onComplete)
+                result = pool.apply_async(doWork, [resizer, path], callback=onComplete)
+
+                # Forces any exception raised by the remote call to be reraised
+                result.get()
             else:
                 onComplete(doWork(resizer, path))
 
