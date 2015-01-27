@@ -121,7 +121,7 @@ Publishing
     $ python setup.py register
 
     # Upload a new source distribution to pypi
-    $ python setup.py sdist upload
+    $ python setup.py sdist bdist_wheel upload
 
 Bug reports
 -----------
