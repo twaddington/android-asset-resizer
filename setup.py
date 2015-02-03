@@ -18,6 +18,7 @@ setup(
     description='A command-line utility for generating Android drawables in'
                 ' the required densities.',
     long_description=open('README.rst').read(),
+    keywords='android asset resource res drawable resizer',
     license=open('LICENSE').read(),
     author='Tristan Waddington',
     author_email='tristan.waddington@gmail.com',
