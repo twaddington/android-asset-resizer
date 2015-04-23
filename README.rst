@@ -1,6 +1,9 @@
 android-asset-resizer
 =====================
 
+.. image:: https://img.shields.io/pypi/dm/android-asset-resizer.svg
+    :target: https://pypi.python.org/pypi/android-asset-resizer
+
 The Android asset resizer can be used to generate drawable assets from a larger
 source image, like an iOS ``@2x`` asset or an ``xhdpi`` drawable.
 
