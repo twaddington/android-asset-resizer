@@ -40,7 +40,7 @@ class AssetResizer():
 
             try:
                 path = os.path.join(self.out, 'res/drawable-%s' % d)
-                os.makedirs(path, 0755)
+                os.makedirs(path, 0o755)
             except OSError:
                 pass
 
