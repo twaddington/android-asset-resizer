@@ -25,7 +25,7 @@ DEFAULT_DENSITY = 'xhdpi'
 DEFAULT_FILTER = 'ANTIALIAS'
 DEFAULT_QUALITY = 85
 DEFAULT_OUT_PATH = os.getcwd()
-DEFAULT_OUT_MODE = 0755
+DEFAULT_OUT_MODE = 0o755
 NINE_PATCH_EXT = '.9.png'
 
 # Legacy setting if multiprocessing is not available
