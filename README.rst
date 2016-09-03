@@ -16,7 +16,7 @@ supporting further development with a `Gittip donation`_!
 Requirements
 ------------
 
-- PIL (tested with version ``1.1.7``, may work with earlier versions)
+- `pillow`_
 
 Installing
 ----------
@@ -144,3 +144,4 @@ License
 .. _Gittip donation: https://www.gittip.com/twaddington/
 .. _LICENSE: https://github.com/twaddington/android-asset-resizer/blob/master/LICENSE 
 .. _GitHub page: https://github.com/twaddington/android-asset-resizer
+.. _pillow: https://pillow.readthedocs.io

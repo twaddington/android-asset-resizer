@@ -9,7 +9,7 @@ except ImportError:
 import android_asset_resizer
 
 requires = [
-    'PIL',
+    'pillow',
 ]
 
 setup(
