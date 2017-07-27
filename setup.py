@@ -19,7 +19,6 @@ setup(
                 ' the required densities.',
     long_description=open('README.rst').read(),
     keywords='android asset resource res drawable resizer',
-    license=open('LICENSE').read(),
     author='Tristan Waddington',
     author_email='tristan.waddington@gmail.com',
     url='https://github.com/twaddington/android-asset-resizer',
