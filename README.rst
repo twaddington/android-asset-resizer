@@ -7,9 +7,6 @@ source image, like an iOS ``@2x`` asset or an ``xhdpi`` drawable.
 The script will generate the expected ``mdpi``, ``hdpi``, ``xhdpi`` and
 ``xxhdpi`` assets from the source image.
 
-If you like this library and it's saved you some time, please consider
-supporting further development with a `Gittip donation`_!
-
 Requirements
 ------------
 
@@ -138,7 +135,5 @@ License
     limitations under the License.
 
 
-.. _Gittip donation: https://www.gittip.com/twaddington/
 .. _LICENSE: https://github.com/twaddington/android-asset-resizer/blob/master/LICENSE 
-.. _GitHub page: https://github.com/twaddington/android-asset-resizer
 .. _pillow: https://pillow.readthedocs.io
