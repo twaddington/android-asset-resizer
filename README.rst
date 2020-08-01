@@ -136,4 +136,5 @@ License
 
 
 .. _LICENSE: https://github.com/twaddington/android-asset-resizer/blob/master/LICENSE 
+.. _GitHub page: https://github.com/twaddington/android-asset-resizer
 .. _pillow: https://pillow.readthedocs.io
